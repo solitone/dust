@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [u'dusty.pythonanywhere.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'pm.apps.PmConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,8 +76,14 @@ WSGI_APPLICATION = 'dust.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dusty$dust',
+        'USER': 'dusty',
+        'PASSWORD': 'sensorePolvere',
+        'HOST': 'dusty.mysql.pythonanywhere-services.com',
+        'OPTIONS': {
+             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
@@ -105,7 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Rome'
 
 USE_I18N = True
 
