@@ -28,6 +28,7 @@ def save(request):
     measurement.save()
 
     responseText = "Hello, you're at the save view.\n"
+    responseText += "+++ now = " + str(now) + "\n"
     responseText += str(Measurement.objects.all())
 
 
