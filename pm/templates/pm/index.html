@@ -1,0 +1,27 @@
+<head>
+    <style>
+        body {background-color: whitesmoke;}
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+{%  if latest_measurement_list %}
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>PM2.5 (ug/m3)</th>
+            <th>PM10 (ug/m3)</th>
+        </tr>
+        {% for measurement in latest_measurement_list %}
+        <tr>
+            <td>{{ measurement.time }}</td>
+            <td>{{ measurement.pm25 }}</td>
+            <td>{{ measurement.pm10 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No measurements available.</p>
+{% endif %}

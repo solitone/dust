@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.template import loader
 from django.utils import dateparse
 # from django.shortcuts import render
 
@@ -6,7 +7,12 @@ from .models import Measurement
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Hello, you're at the pm index.")
+    latest_measurement_list = Measurement.objects.order_by('-time')[:20]
+    template = loader.get_template('pm/index.html')
+    context = {
+        'latest_measurement_list': latest_measurement_list,
+    }
+    return HttpResponse(template.render(context, request))
 
 def save(request):
     now = request.GET['now']
@@ -26,10 +32,5 @@ def save(request):
                               pm25 = pm25,
                               pm10 = pm10)
     measurement.save()
-
-    responseText = "Hello, you're at the save view.\n"
-    responseText += "+++ now = " + str(now) + "\n"
-    responseText += str(Measurement.objects.all())
-
-
+    responseText = "Saved data recorded at " + str(now)
     return HttpResponse(responseText)
