@@ -15,7 +15,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def save(request):
-    now = request.GET['now']
+    time = request.GET['time']
 #    lat = request.GET['lat']
 #    lon = request.GET['lon']
 #    ele = request.GET['ele']
@@ -23,7 +23,7 @@ def save(request):
     pm10 = request.GET['pm10']
 
 
-    time = dateparse.parse_datetime(now)
+    time = dateparse.parse_datetime(time)
 
     measurement = Measurement(time = time,
 #                              lat = lat,
@@ -32,5 +32,5 @@ def save(request):
                               pm25 = pm25,
                               pm10 = pm10)
     measurement.save()
-    responseText = "Saved data recorded at " + str(now)
+    responseText = "Saved data recorded at " + str(time)
     return HttpResponse(responseText)

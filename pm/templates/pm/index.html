@@ -1,11 +1,7 @@
-<head>
-    <style>
-        body {background-color: whitesmoke;}
-        table, th, td {
-            border: 1px solid black;
-        }
-    </style>
-</head>
+{% load static %}
+
+<link rel = "stylesheet" type = "text/css"
+      href = "{% static 'pm/style.css' %}" />
 
 {%  if latest_measurement_list %}
     <table>
