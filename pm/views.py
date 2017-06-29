@@ -1,11 +1,20 @@
 from django.http import HttpResponse
 from django.template import loader
-from django.utils import dateparse
+from django.utils import dateparse, timezone
+from django.utils.dateformat import format
 # from django.shortcuts import render
 
 from .models import Measurement
 
+import datetime, json, random
+
+r = lambda: random.randint(0,255)
+
 # Create your views here.
+def chart(request):
+    template = loader.get_template('pm/chart.html')
+    return HttpResponse(template.render({}, request))
+
 def index(request):
     latest_measurement_list = Measurement.objects.order_by('-time')[:20]
     template = loader.get_template('pm/index.html')
@@ -34,3 +43,32 @@ def save(request):
     measurement.save()
     responseText = "Saved data recorded at " + str(time)
     return HttpResponse(responseText)
+
+def series(request):
+    series = []
+    for x in range(0,11):
+        series.append({
+            'y': r(),
+            'color': '#%02X%02X%02X' % (r(), r(), r())
+        })
+    return HttpResponse(json.dumps(series), content_type="application/json")
+
+def pm25series(request):
+    series = []
+    latest_measurements = Measurement.objects.order_by('-time')[:100]
+    for measurement in latest_measurements:
+        series.append({
+          'x': int(format(measurement.time, 'U'))*1000,
+          'y': float(measurement.pm25)
+        })
+    return HttpResponse(json.dumps(series), content_type="application/json")
+
+def pmseries(request):
+    series = []
+    time_24_hours_ago = timezone.now() - datetime.timedelta(days = 1)
+    latest_measurements = Measurement.objects.filter(time__gte = time_24_hours_ago)
+    for measurement in latest_measurements:
+        series.append(
+            [int(format(measurement.time, 'U'))*1000, float(measurement.pm25), float(measurement.pm10)]
+        )
+    return HttpResponse(json.dumps(series), content_type="application/json")
