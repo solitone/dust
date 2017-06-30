@@ -20,7 +20,7 @@
                     <tbody>
                         {% for measurement in latest_measurement_list %}
                             <tr>
-                                <td>{{ measurement.time }}</td>
+                                <td>{{ measurement.time|date:"SHORT_DATETIME_FORMAT" }}</td>
                                 <td>{{ measurement.pm25 }}</td>
                                 <td>{{ measurement.pm10 }}</td>
                             </tr>
