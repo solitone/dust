@@ -13,6 +13,4 @@ urlpatterns = [
     url(r'^pmseries/$', views.pmseries, name='pmseries'),
 # ex: /pm/save/
     url(r'^save/$', views.save, name='save'),
-# ex: /pm/series/
-    url(r'^series/$', views.series, name='series'),
 ]

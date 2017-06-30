@@ -6,9 +6,7 @@ from django.utils.dateformat import format
 
 from .models import Measurement
 
-import datetime, json, random
-
-r = lambda: random.randint(0,255)
+import datetime, json
 
 # Create your views here.
 def chart(request):
@@ -43,15 +41,6 @@ def save(request):
     measurement.save()
     responseText = "Saved data recorded at " + str(time)
     return HttpResponse(responseText)
-
-def series(request):
-    series = []
-    for x in range(0,11):
-        series.append({
-            'y': r(),
-            'color': '#%02X%02X%02X' % (r(), r(), r())
-        })
-    return HttpResponse(json.dumps(series), content_type="application/json")
 
 def pm25series(request):
     series = []
