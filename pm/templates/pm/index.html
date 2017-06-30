@@ -1,7 +1,9 @@
 {% extends 'pm/base.html' %}
 
 {% block content %}
+    <div class="inline">
     {%  if latest_measurement_list %}
+
         <table>
             <tr>
                 <th>Time</th>
@@ -19,4 +21,72 @@
     {% else %}
         <p>No measurements available.</p>
     {% endif %}
+    </div>
+    <div class="inline">
+        <div class="chart" id="latest"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script type='text/javascript'>
+        $(document).ready(function() {
+            // our code will go here
+            Highcharts.setOptions({ // This is for all plots, change Date axis to local timezone
+                global: {
+                    useUTC: false
+                }
+            });
+
+            var optLatestChrt = {
+                chart: {
+                    type: 'spline',
+                    events: {
+                        load: function() {
+                            // maintain a reference to the chart
+                            var self = this;
+
+                            $.getJSON('{% url 'pm25series' %}', function(data) {
+                                var pm25series = [];
+                                var pm10series = [];
+                                $.each(data, function(key, value){
+                                    pm25series.push([value[0], value[1]]);
+                                    pm10series.push([value[0], value[2]]);
+                                });
+                                // console.log(pm25series);
+                                // console.log(pm10series);
+                                self.series[0].setData(pm10series);
+                                self.series[1].setData(pm25series);
+                            });
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                tooltip: {
+                    crosshairs: true,
+                    shared: true,
+                    valueSuffix: 'μg/m³'
+                },
+                title: {
+                    text: 'Latest measurements'
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'PM 10',
+                        data: [],
+                        color: 'gray'
+                    },
+                    {
+                        name: 'PM 2.5',
+                        data: [],
+                        color: 'black'
+                }]
+            };
+            $('#latest').highcharts(optLatestChrt);
+            // console.log(optLatestChrt);
+        });
+    </script>
 {% endblock content %}

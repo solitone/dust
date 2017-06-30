@@ -55,12 +55,11 @@ def series(request):
 
 def pm25series(request):
     series = []
-    latest_measurements = Measurement.objects.order_by('-time')[:100]
+    latest_measurements = Measurement.objects.order_by('-time')[:20]
     for measurement in latest_measurements:
-        series.append({
-          'x': int(format(measurement.time, 'U'))*1000,
-          'y': float(measurement.pm25)
-        })
+        series.append(
+            [int(format(measurement.time, 'U'))*1000, float(measurement.pm25), float(measurement.pm10)]
+        )
     return HttpResponse(json.dumps(series), content_type="application/json")
 
 def pmseries(request):

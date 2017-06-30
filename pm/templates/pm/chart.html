@@ -70,44 +70,6 @@
             };
             $('#last24h').highcharts(optsLast24hChrt);
             // console.log(optsLast24hChrt);
-/*
-                var options2 = {
-                    chart: {
-                        type: 'area',
-                        events: {
-                            load: function() {
-                                // maintain a reference to the chart
-                                var self = this;
-
-                                $.getJSON('{% url 'pm25series' %}', function(data) {
-                                    self.series[0].setData(data);
-                                });
-                            }
-                        }
-                    },
-                    xAxis: {
-                        type: 'datetime'
-                    },
-                    tooltip: {
-                        crosshairs: true,
-                        shared: true,
-                        valueSuffix: 'μg/m³'
-                    },
-                    title: {
-                        text: 'Latest measurements'
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'PM 2.5',
-                        data: [],
-                        color: 'black'
-                    }]
-                };
-                $('#container2').highcharts(options2);
-                // console.log(options2);
-*/
         });
     </script>
 {% endblock content %}>
