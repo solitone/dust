@@ -14,7 +14,7 @@ def chart(request):
     return HttpResponse(template.render({}, request))
 
 def index(request):
-    latest_measurement_list = Measurement.objects.order_by('-time')[:20]
+    latest_measurement_list = Measurement.objects.order_by('-time')[:10]
     template = loader.get_template('pm/index.html')
     context = {
         'latest_measurement_list': latest_measurement_list,

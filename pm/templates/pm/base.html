@@ -6,49 +6,63 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-              integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
-              crossorigin="anonymous">
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Montserrat">
         <link rel = "stylesheet" type = "text/css"
               href = "{% static 'pm/style.css' %}" />
-        <style>
-            .chart {
-                display: inline-block;
-                width: 400px;
-                height: 300px;
-                border: 1px solid grey;
-                padding: 20px;
-                margin: 20px;
-            }
-            .inline {
-                display: inline-block;
-                width: 400px;
-                height: 300px;
-            }
-            th, td {
-                padding: 2px;
-            }
-        </style>
         <title>Dusty</title>
     </head>
     <body>
         <nav class="navbar navbar-inverse">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Dusty</a>
+                    <a class="navbar-brand" href="{% url 'index' %}">Dusty</a>
                 </div> <!-- /.navbar-header -->
-            </div> <!-- /.container -->
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'index' %}">Now</a></li>
+                        <li><a href="{% url 'chart' %}">24h</a></li>
+                    </ul>
+                </div> <!-- /#myNavbar -->
+            </div> <!-- /.container-fluid -->
         </nav>
 
-        <div class="container">
+        <div class="container-fluid bg-1">
             {% block content %}
             {% endblock %}
         </div> <!-- /.container -->
+
+        <footer class="container-fluid bg-2 text-center">
+            <p>Dusty, a Particulate Matter Sensing Application</p>
+        </footer>
     </body>
+
+    <script>
+    $(function() {
+    /*
+     * Per attivare la voce della barra di navigazione
+     * corrispondente alla pagina che viene visualizzata,
+     * cioè far diventare:
+     *   <li class="active"><a href="#">Navigation item</a></li>
+     *
+     */
+        var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
+        console.log("path="+path);
+        $('.nav li a').each(function() {
+            console.log("this.href="+this.href);
+            if (this.href === path) {
+                console.log("I'm in!");
+                $(this).parent().addClass('active');
+            }
+        });
+    });
+    </script>
 </html>
