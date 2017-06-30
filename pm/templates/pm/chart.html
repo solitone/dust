@@ -19,6 +19,12 @@
         <script type='text/javascript'>
             $(document).ready(function() {
                 // our code will go here
+                Highcharts.setOptions({ // This is for all plots, change Date axis to local timezone
+                    global: {
+                        useUTC: false
+                    }
+                });
+
                 var options1 = {
                     chart: {
                         type: 'area',
