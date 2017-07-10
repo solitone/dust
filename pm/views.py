@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
-from django.utils import dateparse, timezone
+from django.utils import timezone
 from django.utils.dateformat import format
+from django.views.decorators.csrf import ensure_csrf_cookie
 # from django.shortcuts import render
 
 from .models import Measurement
@@ -21,26 +22,38 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
+# ensure_csrf_cookie() decorator forces the 'save' view
+# to send the CSRF cookie to the client.
+@ensure_csrf_cookie
 def save(request):
-    time = request.GET['time']
-#    lat = request.GET['lat']
-#    lon = request.GET['lon']
-#    ele = request.GET['ele']
-    pm25 = request.GET['pm25']
-    pm10 = request.GET['pm10']
+#    Saves data sent via POST. If request method is GET,
+#    it doesn't perform anything, apart from sending back
+#    the CSRF cookie.
+    if request.method == 'GET':
+        return HttpResponse("Sending CSRF cookie.")
 
+    if request.method == 'POST':
+        pm25Values = request.POST.getlist('pm25')
+        pm10Values = request.POST.getlist('pm10')
+        timeValues = request.POST.getlist('time')
 
-    time = dateparse.parse_datetime(time)
+        if len(pm25Values) != len(pm10Values) or len(pm25Values) != len(timeValues):
+            raise ValueError("Number of PM 2.5 measurements differs from PM 10 measurements.")
 
-    measurement = Measurement(time = time,
-#                              lat = lat,
-#                              lon = lon,
-#                              ele = ele,
-                              pm25 = pm25,
-                              pm10 = pm10)
-    measurement.save()
-    responseText = "Saved data recorded at " + str(time)
-    return HttpResponse(responseText)
+        responseText = "Saved data recorded at"
+
+        for pm25, pm10, time in zip(pm25Values, pm10Values, timeValues):
+            #time = dateparse.parse_datetime(time)
+            measurement = Measurement(time = time,
+#                                     lat = lat,
+#                                     lon = lon,
+#                                     ele = ele,
+                                      pm25 = pm25,
+                                      pm10 = pm10)
+            measurement.save()
+            responseText += " " + str(time)
+
+        return HttpResponse(responseText)
 
 def pm25series(request):
     series = []

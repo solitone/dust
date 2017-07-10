@@ -1,5 +1,8 @@
 {% load static %}
 
+{# Per trasmettere sempre il cookie che contiene il csrftoken #}
+
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -59,7 +62,7 @@
         $('.nav li a').each(function() {
             console.log("this.href="+this.href);
             if (this.href === path) {
-                console.log("I'm in!");
+                // console.log("I'm in!");
                 $(this).parent().addClass('active');
             }
         });
