@@ -36,15 +36,18 @@ def save(request):
         pm25Values = request.POST.getlist('pm25')
         pm10Values = request.POST.getlist('pm10')
         timeValues = request.POST.getlist('time')
+        sensorIdValues = request.POST.getlist('id')
 
-        if len(pm25Values) != len(pm10Values) or len(pm25Values) != len(timeValues):
+        if len(pm25Values) != len(pm10Values) or len(pm25Values) != len(timeValues) or \
+           len(pm25Values) != len(sensorIdValues):
             raise ValueError("Number of PM 2.5 measurements differs from PM 10 measurements.")
 
         responseText = "Saved data recorded at"
 
-        for pm25, pm10, time in zip(pm25Values, pm10Values, timeValues):
+        for pm25, pm10, time, sensorId in zip(pm25Values, pm10Values, timeValues, sensorIdValues):
             #time = dateparse.parse_datetime(time)
-            measurement = Measurement(time = time,
+            measurement = Measurement(sensorId = sensorId,
+                                      time = time,
 #                                     lat = lat,
 #                                     lon = lon,
 #                                     ele = ele,
